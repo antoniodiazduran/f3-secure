@@ -1,0 +1,128 @@
+<script>
+function ajax(){
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "/aev/sfapidb", true);
+  xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+      // Response
+      var response = JSON.parse(this.responseText);
+	//console.log(response[0]);
+	createTable(response[0]); 
+   }
+  };
+  xhttp.send();
+}
+
+function createTable(data) {
+
+ var headers = ['Line','Description','UnitNumber','DueDate','Urgency','Requestor','Owner'];
+ var  tbl = document.createElement('table'),
+     tbdy = document.createElement('tbody');
+     thd = document.createElement('thead');
+
+     tbl.setAttribute('class','table table-responsive table-borderless');
+
+  var tr = document.createElement('tr');
+   Object.values(headers).forEach(hdr => {
+     var th = document.createElement('th');
+     th.setAttribute('class','table-dark fontSize');
+     th.appendChild(document.createTextNode(hdr));
+     tr.appendChild(th);
+   });
+  thd.appendChild(tr);
+  tbl.appendChild(thd);
+
+  
+  Object.values(data).forEach(rows => {
+     var tr = document.createElement('tr');
+     var ih = Math.trunc(window.innerHeight/16);
+     var attr1 = `height: ${ih}px; vertical-align:middle;`;
+     const today = new Date().toJSON().slice(0,10);
+     tr.setAttribute('style',attr1);
+    Object.keys(rows).forEach(cols => {
+       	Object.values(headers).forEach(key => {
+	  if (cols == key){
+	    var td = document.createElement('td');	
+	    td.appendChild(document.createTextNode(rows[cols].substr(0,60)));
+		if(rows[cols] == 'Weld') {
+                        tr.setAttribute('style','background-color:gray; color:#000000');
+                        tr.setAttribute('class','bg-info text-dark fontSize');
+                }
+		if(rows[cols] == 'Cabinets') {
+                        tr.setAttribute('style','background-color:silver; color:#000000');
+                        tr.setAttribute('class','fontSize text-nowrap');
+                }
+		if(rows[cols] == 'Mod') {
+                        tr.setAttribute('style','background-color:blue; color:#000000');
+                        tr.setAttribute('class','fontSize text-nowrap');
+                }
+		if(rows[cols] == 'Vans') {
+                        tr.setAttribute('style','background-color:red; color:#000000');
+                        tr.setAttribute('class','fontSize text-nowrap');
+                }
+		if(rows[cols] == 'Paint') {
+                        tr.setAttribute('style','background-color:lightgreen; color:#000000');
+                        tr.setAttribute('class','fontSize text-nowrap');
+                }
+		if(rows[cols] == 'Final') {
+                        tr.setAttribute('class','bg-warning text-dark fontSize text-nowrap');
+                }
+		if(rows[cols] == 'Line Stopper') {
+                        td.setAttribute('class','bg-danger blink fontSize');
+                }
+		if(rows[cols] == 'See due date') {
+                        td.setAttribute('class','bg-warning fontSize');
+                }
+		if(rows[cols].toLowerCase() == 'as available') {
+                        td.setAttribute('class','bg-white fontSize');
+                }
+                if(key == 'DueDate') {
+			if(rows[cols] < today) {
+				td.setAttribute('class','textblinker');
+			}
+		}
+    	    tr.appendChild(td);
+	  }
+	});
+    });
+    tbdy.appendChild(tr);
+  });
+
+  tbl.appendChild(tbdy);
+  var div4=document.getElementById("table-container");
+   div4.innerHTML="";
+   div4.appendChild(tbl);
+  var div6=document.getElementById("last-update");
+   const d = new Date();
+   var f = new Date();
+   f.setHours(d.getHours());
+   let time = f.toLocaleString();
+   div6.innerHTML='<p class=text-muted><i>Last updated:'+time+'</i></p>';
+   //console.log(time);
+   //console.log(window.innerWidth);
+   //console.log(window.innerHeight);
+}
+setInterval(function(){
+  ajax()
+}, 30000);
+
+</script>
+<style>
+   .fontSize { font-size:1.4vw; }
+   td { height:70px;}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<check if="{{ @navs=='yes' }}">
+  <include href="nav.htm">
+</check>
+
+<div id="table-container">
+</div>
+<div id="last-update">
+</div>
+<p>
+<p class=text-muted><small>Page loaded: {{ date('l jS \of F Y h:i:s A') }} UTC</small></p>
+<p>
+<input type="button" value="Data" onclick="ajax();">

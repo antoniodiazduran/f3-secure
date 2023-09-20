@@ -1,0 +1,180 @@
+<check if="{{ @navs == 'yes' }}">
+  <include href="{{ @navmenu }}">
+</check>
+<div style="padding:1px; background-color:blue; opacity:0.8;">
+	<h3>&nbsp; &nbsp; Engineering Support</h3>
+</div>
+<div class="container">
+  <form action="/{{ @breadcrumbs}}/{{ @mode }}" method="POST" name="wipform" onsubmit="return validateForm()">
+    <div class="row">
+	<div id="alertnotes" style="border-radius:25px; border: 2px solid white; padding:15px;">
+	</div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <!--<label for="line">Line</label>//-->
+      </div>
+      <div class="col-75">
+        <label class="titles" for="line">Line</label><p>
+	<input type="radio" id="line" name="line" value="Weld" <check if="@record.Line == 'Weld'"> checked </check> >
+	<label for="html">Weld</label><br>
+	<input type="radio" id="line" name="line" value="Cabinets" <check if="@record.Line == 'Cabinets'"> checked </check>>
+        <label for="html">Cabinets</label><br>
+	<input type="radio" id="line" name="line" value="Paint" <check if="@record.Line == 'Paint'"> checked </check>>
+        <label for="html">Paint</label><br>
+	<input type="radio" id="line" name="line" value="Vans" <check if="@record.Line == 'Vans'"> checked </check>>
+        <label for="html">Vans</label><br>
+	<input type="radio" id="line" name="line" value="Mod" <check if="@record.Line == 'Mod'"> checked </check>>
+        <label for="html">Mod Line</label><br>
+	<input type="radio" id="line" name="line" value="Final" <check if="@record.Line == 'Final'"> checked </check>>
+        <label for="html">Final</label><br>
+      </div>
+    </div>
+   <p>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="unitnumber">Truck</label><p>
+        <input type="text" id="unitnumber" name="unitnumber" placeholder="Truck number" value="{{ @record.UnitNumber }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="customer">Truck Name</label><p>
+        <input type="text" id="customer" name="customer" placeholder="Truck Name" value="{{ @record.Customer }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="requestor">Requestor</label><p>
+        <input type="text" id="requestor" name="requestor" placeholder="Type your name" value="{{ @record.Requestor }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="owner">Engineer Contacted</label><p>
+        <input type="text" id="owner" name="owner" placeholder="Type engineer's name" value="{{ @record.Owner }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="owner">Desginer</label><p>
+        <input type="text" id="designer" name="designer" placeholder="Type Designer's name" value="{{ @record.Designer }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="description">Issue</label><p>
+        <input type="text" id="description" name="description" placeholder="Describe the problem..." value="{{ @record.Description }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="duedate">Due Date</label><p>
+        <input type="date" id="duedate" name="duedate" placeholder="mm/dd/yyyy" value="{{ @record.DueDate }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="urgency">Urgency</label><p>
+        <input type="radio" id="urgency" name="urgency" value="Line Stopper" <check if="{{ @record.Urgency == 'Line Stopper' }}">checked </check>>
+        <label for="html">Line Stopper</label><br>
+        <input type="radio" id="urgency" name="urgency" value="See due date" <check if="{{ @record.Urgency == 'See due date' }}">checked </check>>
+        <label for="html">See due date</label><br>
+        <input type="radio" id="urgency" name="urgency" value="As available" <check if="{{ @record.Urgency == 'As available' }}">checked </check>>
+        <label for="html">As available</label><br>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-25">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="solution">Solution</label><p>
+        <textarea id="solution" name="solution" placeholder="Describe the solution to the problem..." style="height:200px">{{ @record.Solution }}</textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="cause">Cause</label><p>
+        <textarea id="cause" name="cause" placeholder="Decribe the cause of the problem..." style="height:200px">{{ @record.Cause }}</textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+      </div>
+      <div class="col-75">
+        <label class="titles" for="notes">Notes</label><p>
+        <textarea id="notes" name="notes" placeholder="Add any other piece of information..." style="height:200px">{{ @record.Notes }}</textarea>
+      </div>
+    </div>
+	<p>
+	<input type="hidden" name="epoch" id="epoch" value="{{ @record.Epoch}}">
+    <div class="row">
+	<div class="col-25">
+      		<input type="reset" value="Clear">
+	</div>
+	<div class="col-75">
+      		&nbsp; &nbsp;<input type="submit" value="Update" onclick="this.value='Updating...'">
+	</div>
+    </div>
+  </form>
+</div>
+
+<script>
+function validateForm() {
+ const alerts = document.getElementById("alertnotes");
+ alerts.innerHTML='';
+ let lin = document.forms["wipform"]["line"].value;
+ let des = document.forms["wipform"]["description"].value;
+ let cus = document.forms["wipform"]["customer"].value;
+ let uni = document.forms["wipform"]["unitnumber"].value;
+ let due = document.forms["wipform"]["duedate"].value;
+ let urg = document.forms["wipform"]["urgency"].value;
+ let req = document.forms["wipform"]["requestor"].value;
+ let own = document.forms["wipform"]["owner"].value;
+ let ale = "";
+ if ( lin.length=== 0) { ale = ale + "Select the line <br>"; }
+ if ( des.length=== 0) { ale = ale + "Type a description<br>"; }
+ if ( cus.length=== 0) { ale = ale + "Type Customer name<br>"; }
+ if ( uni.length=== 0) { ale = ale + "Type unit number<br>"; }
+ if ( due.length=== 0 && urg != 'As available') { ale = ale + "Add Due Date<br>"; }
+ if ( urg.length=== 0) { ale = ale + "Select urgency level<br>"; }
+ if ( req.length=== 0) { ale = ale + "Add Your name<br>"; }
+ if ( own.length=== 0) { ale = ale + "Add the engineer<br>"; }
+ if ( ale.length > 0) { 
+ 	document.body.scrollTop = document.documentElement.scrollTop = 0; 
+	alerts.style.backgroundColor = "red";
+	alerts.style.color = "white";
+	alerts.style.textAlign = "center";
+	alerts.insertAdjacentHTML('beforeend',ale);
+	document.body.scrollTop = document.documentElement.scrollTop = 0;
+	return false;
+ } else {
+	return true;
+ }
+  
+
+}
+</script>

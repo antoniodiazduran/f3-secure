@@ -1,0 +1,23 @@
+<tr style="background-color:{{ @trcolor }}; color:{{ @ftcolor}};">
+	<td >
+		<a href="/aev/esfs/edit/{{@cols.Epoch}}" target="_blank"><i class="bi-pencil"></i></a> &nbsp;
+		<a href="/aev/nts/edit/{{@cols.Epoch}}" target="_blank"><i class="bi-journal-text"></i></a> &nbsp;
+	</td>
+        <check if="{{ @tdate == 'yes'}}">
+                <td align="left">{{ substr(@cols.DateTime,0,11) }}</td>
+        </check>
+        <td align="left"> {{ (strlen(@cols.UnitNumber)>15)?substr(@cols.UnitNumber,0,15)."..":@cols.UnitNumber }} </td>
+        <check if="{{ @customer == 'yes'}}">
+                <td align="left"> {{ substr(@cols.Customer,0,15) }}</td>
+        </check>
+        <td align="left"> <a href="/aev/owr/edit/{{@cols.Epoch}}">{{ @cols.Owner }}</a> </td>
+        <td align="left"> {{ @cols.Designer }} </td>
+        <td align="left"> {{ @cols.Line }} </td>
+        <td align="left"> {{ (strlen(@cols.Description)>45)?substr(@cols.Description,0,47)."...":@cols.Description }} </td>
+        <td align="left"> {{ (strlen(@cols.Solution)>45)?substr(@cols.Solution,0,47)."...":@cols.Solution }} </td>
+        <td align="left"> {{ (strlen(@cols.Cause)>45)?substr(@cols.Cause,0,47)."...":@cols.Cause }} </td>
+        <td align="left"> {{ @cols.Origin }} </td>
+        <td align="left"> {{ @cols.DueDate }} </td>
+ <!--       <td align="left" style="border:2px solid white;background-color:{{ @tdcolor}};color:{{@urcolor}};" <check if="{{ @cols.Urgency == 'Line Stopper' or @dueblink==1 }}"> class="blink" </check>>//-->
+	<td align="left">{{ @cols.Urgency }}</td>
+</tr>

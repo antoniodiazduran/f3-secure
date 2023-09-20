@@ -1,0 +1,20 @@
+/* Blink for  list line or show stoppers*/
+.blink {
+  animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker{
+    0%{
+     opacity: 0;
+   }
+   50%{
+     opacity: 0.5;
+   }
+   100%{
+     opacity: 1;
+   }
+}
+/*Text blinker for past due*/
+
+.textblinker { animation: tblinker 2s ease-in-out infinite alternate; }
+@keyframes tblinker { to { opacity: 0; }} 

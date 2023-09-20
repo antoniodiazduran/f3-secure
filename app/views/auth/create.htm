@@ -1,0 +1,125 @@
+<div class="container">
+<form action="{{ @BASE.'/auth/create' }}" method="post" onkeyup="validate()">    
+  <div class="row">
+    <div class="col-25">
+     <p><img src="/ui/images/dlogo.png" width="100"></p>
+    </div>
+    <div class="col-75">
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-25">
+    </div>
+    <div class="col-75">
+      <label class="titles" for="username">Username:</label>
+        <input type="text" id="username" name="username"  onkeyup="check_username()"/>
+    </div>
+    <div class="col-75" id="username_error"></div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+    </div>
+    <div class="col-75">
+      <label class="titles" for="password">Password:</label>
+        <input type="password" id="password" name="password"  />
+    </div>
+    <div class="col-75" id="password_error"></div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+    </div>
+    <div class="col-75">
+      <label class="titles" for="password">Re-Type:</label>
+        <input type="password" id="retype" name="retype"  />
+    </div>
+    <div class="col-75" id="retype_error"></div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+    </div>
+    <div class="col-75">
+      <label class="titles" for="roles">User role:</label>
+        <select id="roles" name="roles"   onChange="validate()">
+		<option>
+		<option>Finance
+		<option>Operations
+	</select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-25">
+    </div>
+    <div class="col-75">
+      <label class="titles" for="bp_id">Email:</label>
+        <input type="text" id="email" name="email"  />
+    </div>
+  </div>
+<br>
+  <div class="row"> 
+    <div class="col-25">
+    </div>
+    <div class="col-75">
+      <button id="create" type="submit" class="form-control btn btn-warning" style="display:none;" value="create">Create</button>
+    </div>
+  </div>
+</form>
+</div>
+
+<script>
+ function pageLoad(){
+	document.getElementById("create").style.display = 'none';
+ }
+
+  function validate(){
+	var ok_count = 0;
+	if (document.getElementById("username_error").innerHTML == '<br><br>User available') { ok_count++; } 
+	if (document.getElementById("password_error").innerHTML == '<br><br>') { ok_count++; }
+	if (document.getElementById("retype_error").innerHTML == '<br><br>') { ok_count++; }
+	if (document.getElementById("roles").value != '') { ok_count++; }
+	if (document.getElementById("email").value != '') { ok_count++; }
+	if (ok_count == 5){
+		document.getElementById("create").style.display = 'block';
+	} else {
+		document.getElementById("create").style.display = 'none';
+        }
+	var error1 = '<br><br>';
+	var error2 = '<br><br>';
+	if (document.getElementById("password").value != document.getElementById("retype").value) {
+                document.getElementById("retype").setAttribute('style','background-color:white;color:black;')
+                error2 += 'Password not matching';
+        }
+	document.getElementById("retype_error").innerHTML = "error2";
+	
+	if (document.getElementById("password").value.length < 8) {
+                document.getElementById("password").setAttribute('style','background-color:white;color:black;')
+                error1 += 'Must be at least 8 characters';
+	}
+	document.getElementById("password_error").innerHTML = error1;
+	
+  }
+
+  function check_username() {
+        var usr_id = document.getElementById("username");
+        var usrerr_id = document.getElementById("username_error");
+	var urlx = '/checkusername/'+usr_id.value;
+	var error = '<br><br>';
+	if (usr_id.value.length < 8) {
+		usr_id.setAttribute('style','background-color:white;color:black;')
+		usrerr_id.innerHTML = error + 'Must be at least 8 characters';
+	}
+	if (usr_id.value.length >= 8) {
+	   $.get(urlx, function(data,result) {
+		if ( data == 0 && result == 'success') { 
+			usr_id.setAttribute('style','background-color:green;color:white;')
+			usrerr_id.innerHTML = error + 'User available';
+			validate(); 
+		} else {
+			usr_id.setAttribute('style','background-color:red;color:white;')	
+			usrerr_id.innerHTML = error + 'User NOT available';
+			validate(); 
+		}
+	   });
+	}
+  }
+
+</script>

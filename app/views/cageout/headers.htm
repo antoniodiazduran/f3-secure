@@ -1,0 +1,11 @@
+<set ii=0>
+<repeat group="{{@details[0] }}" key="{{ @ikey }}" value="{{ @cols }}">
+	<check if="{{ @ii == 0}}">
+	<tr style="background:green; opacity:0.7;">
+	<repeat group="{{ @cols }}" key="{{ @ikey}}" value="{{ @vals}}">
+                   <th>{{ @ikey }}</th>
+	</repeat>
+	</tr>
+	<!-- {{ @ii++ }} //->
+	</check>
+</repeat>
