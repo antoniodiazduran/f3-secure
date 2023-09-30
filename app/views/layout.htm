@@ -17,10 +17,12 @@
 	</check>
 		<link rel="stylesheet" href="/ui/css/theme.css" type="text/css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-
+<!--		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">//-->
+-		<link rel="stylesheet" href="/ui/css/bootstrap.min.css">
+		<script src="ui/js/local.js"></script>
 	</head>
 	<body>
-user: {{ @SESSION.user }} | timeout: {{ @SESSION.timeout }}  {{ time() }}
+	user: {{ @SESSION.user }} 
 		<include href="{{ @content }}">
 	</body>
 </html>

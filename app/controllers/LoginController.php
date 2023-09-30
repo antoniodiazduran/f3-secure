@@ -1,14 +1,17 @@
 <?php
 
-  class LoginController extends \Controller{
+class LoginController extends \Controller{
 
-    function login(){
+    function render(){
         $this->f3->set('SESSION.user', null);
         $this->f3->set('SESSION.company', null);
+	    $this->f3->set('msg',$this->f3->get('msgs'));
+	    $this->f3->set('stat','dark');
+
 	    $this->f3->set('isMobile',$this->isMobile());
 	    $this->f3->set('layout','layout.htm');
-            $this->f3->set('content','auth/login.htm');
-//	    echo \Template::instance()->render($this->f3->get('layout'));
+	    $this->f3->set('content','auth/login.htm');
+            echo \Template::instance()->render($this->f3->get('layout'));
     }
 
     function enable(){
@@ -19,9 +22,7 @@
         if ($status == 0) {
             $this->f3->set('msg','Validation code too old');
             $this->f3->set('stat','warning');
-	    $this->f3->set('isMobile',$this->isMobile());
-	    $this->f3->set('layout','layout.htm');
-            $this->f3->set('content','auth/error.htm');
+            echo $template->render('auth/error.htm');
         } else {
             $this->f3->set('msg','Username enabled, login in with your credentials...');
             $this->f3->set('stat','success');
@@ -32,33 +33,28 @@
             $this->f3->set('SESSION.companyname', '');
             $this->f3->set('SESSION.sitename', '');
             $this->f3->set('SESSION.sitenumber', '');
-	    $this->f3->set('isMobile',$this->isMobile());
-	    $this->f3->set('layout','layout.htm');
-            $this->f3->set('content','auth/login.htm');
+            echo $template->render('auth/login.htm');
         }
-  //      echo \Template::instance()->render($this->f3->get('layout'));
     }
 
     function error() {
 	if ($this->f3->get('SESSION.user')!='') {
 	    $this->f3->set('msg','Hmmm... have you been drinking?');
-	    $this->f3->set('content','/auth/error.htm');
+	    $this->f3->set('view','/auth/internalerror.htm');
 	} else {
-        $this->f3->set('msg','Are you lost or something?');
-	    $this->f3->set('isMobile',$this->isMobile());
-	    $this->f3->set('layout','layout.htm');
-        $this->f3->set('content','auth/error.htm');
+        $template=new Template;
+	    $this->f3->set('msg','Are you lost or something?');
+        echo $template->render('auth/error.htm');
 	}
-//       echo \Template::instance()->render($this->f3->get('layout'));
     }
 
     function signin() {
-	$this->f3->set('SESSION.user', null);
-    	$this->f3->set('SESSION.company', null);
-    	$this->f3->set('isMobile',$this->isMobile());
-    	$this->f3->set('layout','layout.htm');
-    	$this->f3->set('content','auth/create.htm');
- //   	echo \Template::instance()->render($this->f3->get('layout'));
+	    $this->f3->set('SESSION.user', null);
+        $this->f3->set('SESSION.company', null);
+	    $this->f3->set('isMobile',$this->isMobile());
+	    $this->f3->set('layout','layout.htm');
+	    $this->f3->set('content','auth/create.htm');
+            echo \Template::instance()->render($this->f3->get('layout'));
     }
 
     function create() {
@@ -89,7 +85,7 @@
              $msg .= 'It was granted for the '.$user->roles.' area <br/>';
              $msg .= '<p/>';
              $msg .= '<hr> Click on the link below to enable your account in the system <br/>';
-             $msg .= 'http://info.diaz.works/bpval/'.$code;
+             $msg .= 'http://35.209.35.43/bpval/'.$code;
 
              // Saving userlog to verify
              $userlog = new Userlogs($this->d1);
@@ -110,13 +106,9 @@
              }
 
         }
-    	    $this->f3->set('stat','dark');
-	    $this->F3->SET('msg','none');
-	    $this->f3->set('isMobile',$this->isMobile());
-	    $this->f3->set('layout','layout.htm');
-        $this->f3->set('content','auth/login.htm');
-   //    echo \Template::instance()->render($this->f3->get('layout'));
-  }
+            $template=new Template;
+            echo $template->render('auth/login.htm');
+    }
 
     function create_old() {
 	if($this->f3->exists('POST.create')) {
@@ -127,10 +119,8 @@
 	    $this->f3->set('msg','Username and Password Created!');
 	    $this->f3->set('stat','success');
 	}
-	    $this->f3->set('isMobile',$this->isMobile());
-	    $this->f3->set('layout','layout.htm');
-        $this->f3->set('content','auth/login.htm');
-       echo \Template::instance()->render($this->f3->get('layout'));
+        $template=new Template;
+        echo $template->render('auth/login.htm');
     }
 
     function validate() {
@@ -142,6 +132,11 @@
 	    $user->checkusername($this->f3->get('PARAMS.id'));
 	    echo $user;
 	    exit;
+    }
+
+    function beforeroute(){
+        // refresh timer on every click
+        //$this->f3->set('SESSION.timeout', time()+$this->f3->get('expire'));
     }
 
     function logout() {
@@ -162,16 +157,17 @@
         // Getting user information
         $user->getByName($username);
         if($user->dry()==1) {
-            // Username not found
+            // Username not founf
             $this->f3->set('msg','Username not found');
             $this->f3->set('stat','warning');
             // Logger
             $logger->write('Username '.$username.' not found');
 	    $this->f3->set('isMobile',$this->isMobile());
-            $this->f3->set('layout','layout.htm');
-            $this->f3->set('content','auth/error.htm');
+	    $this->f3->set('layout','layout.htm');
+	    $this->f3->set('content','auth/error.htm');
+            echo \Template::instance()->render($this->f3->get('layout'));
         } else {
-	    // Getting company name
+            // Getting company name
             $company->getByName($user->company);
             if($user->verified == 1) {
                     //echo $user->username;
@@ -199,7 +195,7 @@
 			} else {
                     		$this->f3->set('SESSION.nav_color', $company->nav_color);
 			}
-                    $this->f3->set('SESSION.sitename', '');
+	            $this->f3->set('SESSION.sitename', '');
                     $this->f3->set('SESSION.sitenumber', '');
                     $this->f3->set('SESSION.ip', $this->f3->ip());
                     $this->f3->set('SESSION.timeout', time()+$this->f3->get('expire'));
@@ -208,19 +204,19 @@
                     $this->f3->set('company',$user->company);
                     $this->f3->set('stat','success');
                     $this->f3->set('msg','Welcome!');
-  	            $this->f3->set('isMobile',$this->isMobile());
-		    $this->f3->set('layout','layout.htm');
-                    $this->f3->set('content','welcome.htm');
-                } else {
-		    // error logging in
-                    $this->f3->set('stat','danger');
-                    $this->f3->set('msg','Incorrect Username & Password');
-                    // Logger
-                    $logger->write('Incorrect username and password for '.$user->username);
-                    // Rendering
-    	            $this->f3->set('isMobile',$this->isMobile());
-                    $this->f3->set('layout','layout.htm');
-            	    $this->f3->set('content','auth/error.htm');
+		    $this->f3->set('isMobile',$this->isMobile());
+       		    $this->f3->set('layout','layout.htm');
+       		    $this->f3->set('content','navmain.htm');
+                  } else {
+			// error logging in
+			$this->f3->set('stat','danger');
+			$this->f3->set('msg','Incorrect Username & Password');
+			// Logger
+			$logger->write('Incorrect username and password for '.$user->username);
+			// Rendering
+ 			$this->f3->set('isMobile',$this->isMobile());
+       			$this->f3->set('layout','layout.htm');
+       			$this->f3->set('content','auth/error.htm');
                 }
             } else {
  		// user missing verification
@@ -229,15 +225,17 @@
                 // Logger
                 $logger->write('User not verified for '.$user->username);
                 // Rendering
-     	   	$this->f3->set('isMobile',$this->isMobile());
-            	$this->f3->set('layout','layout.htm');
-          	$this->f3->set('content','auth/login.htm');
+		$this->f3->set('isMobile',$this->isMobile());
+      		$this->f3->set('stat','');
+		$this->f3->set('layout','layout.htm');
+		$this->f3->set('content','auth/error.htm');
             }
+	// Rendering results
+	echo \Template::instance()->render($this->f3->get('layout'));
         }
-    // Rendering the results
-    //echo \Template::instance()->render($this->f3->get('layout'));
-
     }
 
-  }  // class
+
+}  // class
+
 ?>

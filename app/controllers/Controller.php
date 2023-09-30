@@ -5,10 +5,8 @@ class Controller {
     protected $f3;
     protected $db;
     protected $d1;
-    protected $rev;
-    protected $aev;
-    protected $sales;
     protected $dmz;
+    protected $url;
 
     function __construct() {
         $f3=Base::instance();
@@ -16,20 +14,14 @@ class Controller {
 	// Enabling saving data to sqlite
 	$db = new DB\SQL('sqlite:data/enc.sqlite');
 	$d1 = new DB\SQL('sqlite:data/global.sqlite');
-	//$rev = new DB\SQL('sqlite:data/rev.sqlite');
-	//$aev = new DB\SQL('sqlite:data/aev.sqlite');
-	//$sales = new DB\SQL('sqlite:data/sales.sqlite');
 
         // De-Militirizaed Zone for public pages
-	$dmz = array('/mat/screen','/mat/receiving','/sf');
+	//$dmz = array('/mat/screen','/mat/receiving','/sf');
 
-	$this->dmz=$dmz;
+	//$this->dmz=$dmz;
 	$this->f3=$f3;
 	$this->db=$db;
 	$this->d1=$d1;
-	//$this->rev=$rev;
-	//$this->aev=$aev;
-	//$this->sales=$sales;
 
         $f3->set('CACHE','folder=/var/tmp/f3filescache/');
 
@@ -39,65 +31,37 @@ class Controller {
 //  Secure Before and After route
 //  *****************************
 
-     function beforeRoute() {
-     }
+     function beforeroute() {
+    if ($this->f3->get('SECURE')) {
+	if($this->f3->get('SESSION.user') === NULL ) {
+		echo "u_null:";
+		$this->f3->reroute('/login');
+		exit;
+	}
+	if($this->f3->get('SESSION.timeout') < time()) {
+		echo "s_time:";
+		$this->f3->set('SESSION.user',NULL);
+		$this->f3->set('SESSION.bp_id',NULL);
+		$this->f3->reroute('/login');
+		exit;
+	}
 
-    function afterRoute() {
-      if ($this->f3->get('SECURE')) {
-          if($this->f3->get('SESSION.user') === null) {
-echo "u";
-             $this->f3->set('SESSION.bp_id', null);
-          //   echo \Template::instance()->render($this->f3->get('layout'));
-          }
-          if($this->f3->get('SESSION.timeout') < time()) {
-echo "t";
-             echo $this->f3->set('SESSION.user',null);
-	  }
-
-        // Setting up the page parameters
-/*        $this->f3->set('isMobile',$this->isMobile());
-        $this->f3->set('layout','layout.htm');
-        $this->f3->set('content','auth/login.htm');
-*/
         // Refresh timer on every click
         date_default_timezone_set('America/New_York');
         $this->f3->set('SESSION.timeout', time()+$this->f3->get('expire'));
         $this->f3->set('SESSION.timeoutdate',date('Y.m.d h:i:s',time()+$this->f3->get('expire')) );
+
       }
 
-/*      if ($this->f3->get('SECURE')) {
-        if($this->f3->get('SESSION.user') != null ) {
-          if ( $this->f3->get('SESSION.ip') === $this->f3->ip() ) {
-	     //$this->f3->reroute('/login');
-  	     //echo \Template::instance()->render($this->f3->get('layout'));
-  	     echo \Template::instance()->render('layout.htm');
-          } else {
-             echo "Session Terminated..".$this->f3->get('SESSION.ip');
-          }
-        }
-      } else {
-	//echo \Template::instance()->render($this->f3->get('layout')); 
-      }
-*/
-        echo  "a";
-        echo \Template::instance()->render($this->f3->get('layout'));
+     }
+
+     function afterroute() {
+	$this->f3->set('stat','after');
+	echo \Template::instance()->render($this->f3->get('layout'));
     }
 
 
 //  ****************************
-
-    function xbeforeRoute() {
-
-    }
-
-    function xafterRoute() {
-	// Testing array in config file
-	//echo "w".$this->f3->get('DMZ.2');
-	foreach ($this->dmz as $key=>$page) { 
-	  //echo "w".$page;
-	}
-	echo \Template::instance()->render($this->f3->get('layout'));
-    }
 
     function GSheetsInsert($sheetid,$row,$fileid) {
                 //require '/home/antoniodiazduran/vendor/autoload.php';

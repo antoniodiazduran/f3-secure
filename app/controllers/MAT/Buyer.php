@@ -25,7 +25,7 @@ class Buyer extends \Controller {
                 } else {
                 $data[] = $this->db->exec("SELECT *, (SELECT substr(customer,1,3) FROM enc_so WHERE m.UnitID = AX) AS Customer,(SELECT ship FROM enc_so WHERE m.UnitID = AX) AS ship FROM enc_matlog m WHERE $fld = ? AND arriveddate is null ORDER BY rid DESC",$val);
                 }
-                $this->f3->set('ourip',$_SERVER['REMOTE_ADDR']);
+                //$this->f3->set('ourip',$_SERVER['REMOTE_ADDR']);
                 $this->f3->set('details',$data);
 		$this->f3->set('rowcount',count($data[0]));
                 $this->f3->set('breadcrumbs','mat');
@@ -35,6 +35,7 @@ class Buyer extends \Controller {
                 $this->f3->set('nav_menu','navbuyers.htm');
                 $this->f3->set('customer','yes');
                 $this->f3->set('bgcolor','red');
+		$this->f3->set('columns','[1,2,3,4,5,6,7,8,9,10,11,12]');
                 $this->f3->set('headers','materials/headers.htm');
                 $this->f3->set('fields','materials/buyersfields.htm');
                 $this->f3->set('layout','layout.htm');

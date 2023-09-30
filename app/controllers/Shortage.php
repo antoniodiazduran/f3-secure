@@ -21,6 +21,7 @@ class Shortage extends Controller {
                 $this->f3->set('mode','create');
                 $this->f3->set('layout','layout.htm');
 		$this->f3->set('menu','nav_pw.htm');
+		$this->f3->set('res','Admin');
 		$this->f3->set('content','shortage/form.htm');
     }
     public function insertRow() {
