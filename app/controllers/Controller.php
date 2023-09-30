@@ -56,7 +56,7 @@ class Controller {
      }
 
      function afterroute() {
-	$this->f3->set('stat','after');
+//	$this->f3->set('stat','after');
 	echo \Template::instance()->render($this->f3->get('layout'));
     }
 

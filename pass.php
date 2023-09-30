@@ -1,6 +1,6 @@
 <?php
 
-$pass = 'o2c5t';
+$pass = $argv[1];
 
 echo password_hash($pass,PASSWORD_DEFAULT)."\n";
 

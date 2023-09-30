@@ -11,7 +11,7 @@ class LoginController extends \Controller{
 	    $this->f3->set('isMobile',$this->isMobile());
 	    $this->f3->set('layout','layout.htm');
 	    $this->f3->set('content','auth/login.htm');
-            echo \Template::instance()->render($this->f3->get('layout'));
+//            echo \Template::instance()->render($this->f3->get('layout'));
     }
 
     function enable(){
@@ -54,7 +54,7 @@ class LoginController extends \Controller{
 	    $this->f3->set('isMobile',$this->isMobile());
 	    $this->f3->set('layout','layout.htm');
 	    $this->f3->set('content','auth/create.htm');
-            echo \Template::instance()->render($this->f3->get('layout'));
+            //echo \Template::instance()->render($this->f3->get('layout'));
     }
 
     function create() {
@@ -106,8 +106,8 @@ class LoginController extends \Controller{
              }
 
         }
-            $template=new Template;
-            echo $template->render('auth/login.htm');
+//            $template=new Template;
+  //          echo $template->render('auth/login.htm');
     }
 
     function create_old() {
@@ -157,15 +157,15 @@ class LoginController extends \Controller{
         // Getting user information
         $user->getByName($username);
         if($user->dry()==1) {
-            // Username not founf
-            $this->f3->set('msg','Username not found');
-            $this->f3->set('stat','warning');
             // Logger
             $logger->write('Username '.$username.' not found');
+            // Username not founf
+            $this->f3->set('msg','Username not found!');
+            $this->f3->set('stat','warning');
 	    $this->f3->set('isMobile',$this->isMobile());
 	    $this->f3->set('layout','layout.htm');
 	    $this->f3->set('content','auth/error.htm');
-            echo \Template::instance()->render($this->f3->get('layout'));
+//            echo \Template::instance()->render($this->f3->get('layout'));
         } else {
             // Getting company name
             $company->getByName($user->company);
@@ -208,30 +208,28 @@ class LoginController extends \Controller{
        		    $this->f3->set('layout','layout.htm');
        		    $this->f3->set('content','navmain.htm');
                   } else {
-			// error logging in
-			$this->f3->set('stat','danger');
-			$this->f3->set('msg','Incorrect Username & Password');
 			// Logger
 			$logger->write('Incorrect username and password for '.$user->username);
 			// Rendering
+			$this->f3->set('msg','Incorrect Username & Password!');
  			$this->f3->set('isMobile',$this->isMobile());
+			$this->f3->set('stat','danger');
        			$this->f3->set('layout','layout.htm');
        			$this->f3->set('content','auth/error.htm');
                 }
             } else {
+                // Logger
+                $logger->write('User not verified for '.$user->username);
  		// user missing verification
                 $this->f3->set('stat','warning');
                 $this->f3->set('msg','User not verified!');
-                // Logger
-                $logger->write('User not verified for '.$user->username);
                 // Rendering
 		$this->f3->set('isMobile',$this->isMobile());
-      		$this->f3->set('stat','');
 		$this->f3->set('layout','layout.htm');
 		$this->f3->set('content','auth/error.htm');
             }
 	// Rendering results
-	echo \Template::instance()->render($this->f3->get('layout'));
+	//echo \Template::instance()->render($this->f3->get('layout'));
         }
     }
 

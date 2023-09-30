@@ -29,6 +29,7 @@ class Receive extends \Controller {
                 $this->f3->set('navs','yes');
                 $this->f3->set('nav_menu','navleaders.htm');
                 $this->f3->set('customer','yes');
+                $this->f3->set('isMobile',parent::isMobile());
                 $this->f3->set('bgcolor','orange');
                 $this->f3->set('headers','materials/headers.htm');
                 $this->f3->set('fields','materials/receivingfields.htm');

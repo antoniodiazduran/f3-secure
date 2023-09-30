@@ -1,33 +1,3 @@
- // **********************************************************
- //
- // Used on every list.htm file to filter "shorts" table object
- // Set column number from controller using '[1,2,3]' format
- //
- // **********************************************************
-
-    function searchTable() {
-        var input, filter, table, tr, td, i, txtValue;
-        // Columns to inspect
-        var columns = {{ @columns }};
-        filter = document.getElementById("search").value.toUpperCase();
-        table = document.getElementById("shorts");
-        tr = table.getElementsByTagName("tr");
-        td = [];
-        for (i = 1; i < tr.length; i++) {
-         for (var j of columns) {
-            td[j] = tr[i].getElementsByTagName("td")[j];
-            if (td[j].innerText != '') {
-                if (td[j].innerText.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                    break;
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-         }
-        }
-    }
-
  // *************************************
  // JavaScript program to illustrate
  // Table sort for both columns and
