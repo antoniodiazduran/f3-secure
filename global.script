@@ -1,0 +1,4 @@
+CREATE TABLE sqlite_sequence(name,seq);
+CREATE TABLE company ( id integer primary key autoincrement, name text, city text, state text, country text, zipcode text);
+CREATE TABLE users (id integer primary key autoincrement, username text, password text, fullname text, company text, role text, email text, verified integer, roles text);
+CREATE TABLE access (id INTEGER PRIMARY KEY AUTOINCREMENT, paths TEXT, uid TEXT, gid TEXT, access TEXT);
